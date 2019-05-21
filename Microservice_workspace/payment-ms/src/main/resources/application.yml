@@ -1,0 +1,50 @@
+spring:
+  cloud:
+    config:
+      uri: http://locahost:8888
+       
+  application:
+    name: payment-ms
+
+---
+
+spring:
+  cloud:
+    stream:
+      bindings:
+        paymentsChannel:
+          binder: rabbit
+          destination: newpayment.ibm.exchange
+          content-type: application/json
+          group: ibmblr    
+          
+---
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:37017/ibm
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/ibm
+    username: admin
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    
+server:
+  port: ${PORT:${SERVER_PORT:0}}
+  
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}} 
+  
+---
+spring:
+  zipkin:
+    base-url: http://localhost:8085
+  sleuth:
+    sampler:
+      percentage: 1.0

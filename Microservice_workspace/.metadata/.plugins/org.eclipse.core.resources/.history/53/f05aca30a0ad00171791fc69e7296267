@@ -1,0 +1,21 @@
+package com.myapp.cloud.api.cloud;
+
+import java.util.List;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.myapp.cloud.model.Order;
+
+@FeignClient("ORDER-MS")
+public interface OrderClient {
+	
+	@GetMapping("/orders")
+	List<Order> findAll();
+	
+	@PutMapping("/orders")
+	String placeNewOrder(@RequestBody Order order);
+
+}
